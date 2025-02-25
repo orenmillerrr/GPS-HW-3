@@ -114,3 +114,56 @@ title("Time = 301 - 450")
 subplot(2,2,4)
 histogram(MC_mean2(451:600))
 title("Time = 451 - 600")
+
+%% Question 2 - Part C
+
+tau = [1 100];
+sigma = [0.1 0.01];
+sims = 1000;
+time = 600;
+dt = 1;
+
+for i = 1 : length(tau)
+    for j = 1 : length(sigma)
+        for idx = 1 : sims
+        
+            x(1,idx) = 0;
+        
+            for t = 1 : time/dt
+                
+                x_dot(t,idx) = -(1/tau(i))*x(t,idx) + sigma(j)*randn(1);
+                x(t+1,idx)   = x(t,idx) + x_dot(t,idx)*dt;
+        
+            end   
+        end
+
+        X(i,j) = {x};
+        MC_mean(i,j) = {mean(x')};
+        MC_std(i,j)  = {std(x')};
+
+        figure
+        plot(0:dt:time,x,'.r')
+        hold on 
+        grid on
+        MU  = plot(0:dt:time,mean(x'),"k");
+        SIG = plot(0:dt:time,mean(x') + 3*std(x'),"k--");
+        plot(0:dt:time,mean(x') - 3*std(x'),"k--")
+        title({"Monte-Carlo Results","Sigma: " + string(sigma(j)) + " & Tau: " + string(tau(i))})
+        legend([MU,SIG],["\mu_{MC}","\mu_{MC} +/- 3\sigma_{MC}"])
+
+        A = (1 - dt/tau(i));
+        sig_x = sigma(j)*dt*sqrt((A.^(2*(0:dt:time))-1)/(A^2-1));
+
+        figure
+        plot(0:dt:time,std(x'),'r.')
+        hold on
+        grid on
+        plot(0:dt:time,sig_x,'k')
+        title({"Monte-Carlo & Markov Comparison","Sigma: " + string(sigma(j)) + " & Tau: " + string(tau(i))})
+        legend(["\sigma_{MC}","\sigma_{x}"])
+    end
+end
+
+
+
+
