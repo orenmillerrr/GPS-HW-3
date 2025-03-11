@@ -1,8 +1,7 @@
 clear;clc;close all
 
 %% Question 8 - Part A
-
-PRN4 = CA_Code_Gen(14,1,-1);
+PRN4 = CA_Code_Gen(4,1,-1);
 PRN7 = CA_Code_Gen(7,1,-1);
 
 subplot(1,2,1)
@@ -28,8 +27,8 @@ title("PSD for PRN7")
 
 %% Question 8 - Part C
 
-[acorr_PRN4,idx4] = xcorr(PRN4);
-[acorr_PRN7,idx7] = xcorr(PRN7);
+[acorr_PRN4,idx4] = cxcorr(PRN4);
+[acorr_PRN7,idx7] = cxcorr(PRN7);
 
 figure
 subplot(2,1,1)
@@ -47,12 +46,12 @@ ylabel("Correlation")
 
 %% Question - Part D
 
-[xcorr_PRN47,idx47] = xcorr(PRN4,PRN7);
+[xcorr_PRN47,idx47] = cxcorr(PRN4,PRN7);
 
 figure
 plot(idx47,xcorr_PRN47)
 grid on
 title("Cross Correlation of PRN4 and PRN7")
 xlabel("Shift")
+xlim([idx47(1) idx47(end)])
 ylabel("Correlation")
-
